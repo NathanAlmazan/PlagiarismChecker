@@ -1,5 +1,6 @@
 package com.algorithms.plagiarism.accounts.models;
 
+import com.algorithms.plagiarism.assignment.models.SubjectModel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,4 +33,8 @@ public class TeacherModel {
     @JsonBackReference
     @JoinColumn(name = "account_uid", referencedColumnName = "account_uid", nullable = false)
     private AccountModel teacherAccount;
+
+    @OneToMany(mappedBy = "subjectTeacher")
+    @JsonBackReference
+    private List<SubjectModel> subjects;
 }
