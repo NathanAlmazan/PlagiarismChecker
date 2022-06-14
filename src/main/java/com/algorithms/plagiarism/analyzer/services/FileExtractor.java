@@ -1,6 +1,8 @@
 package com.algorithms.plagiarism.analyzer.services;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,10 +14,9 @@ import java.net.URL;
 import java.util.LinkedList;
 
 @Getter
+@NoArgsConstructor
 public class FileExtractor {
     private String pdfText;
-
-    public FileExtractor() { }
 
     public FileExtractor(final String urlSource) throws IOException {
         URL url = new URL(urlSource);

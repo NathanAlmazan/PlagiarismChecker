@@ -39,14 +39,6 @@ public class BinarySearchTree {
         return null;
     }
 
-    public void traverseInOrder(Node node) {
-        if (node != null) {
-            traverseInOrder(node.left);
-            System.out.println(node.value + " -> " + node.count);
-            traverseInOrder(node.right);
-        }
-    }
-
     public double summationOfValues(Node node) {
         if (node != null) return (square(node.count) + summationOfValues(node.left) + summationOfValues(node.right));
         return 0;

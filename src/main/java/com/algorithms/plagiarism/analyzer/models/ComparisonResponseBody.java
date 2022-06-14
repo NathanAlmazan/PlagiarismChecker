@@ -10,7 +10,5 @@ import java.util.LinkedList;
 @NoArgsConstructor
 public class ComparisonResponseBody {
     private double cosineDistance;
-    private LinkedList<String> similarTerms;
-    private LinkedList<String> sentencesA;
-    private LinkedList<String> sentencesB;
+    private LinkedList<String> similarSentences;
 }

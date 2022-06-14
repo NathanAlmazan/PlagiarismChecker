@@ -6,12 +6,11 @@ import java.util.LinkedList;
 
 @Getter
 public class CosineDistance {
+    private LinkedList<String> similarSentences;
     private LinkedList<String> similarWords;
-    private LinkedList<String> textASentences;
-    private LinkedList<String> textBSentences;
     private double cosineDistance;
 
-    public CosineDistance(String textA, String textB, boolean collectWords) {
+    public CosineDistance(String textA, String textB, boolean collectSentences) {
         String[] setA = textA.split(">");
         String[] setB = textB.split(">");
 
@@ -35,26 +34,22 @@ public class CosineDistance {
         cosineDistance = summationOfIntersection(btreeA.getRoot(), btreeB) / Math.sqrt(btreeA.summationOfValues(btreeA.getRoot()) * btreeB.summationOfValues(btreeB.getRoot()));
 
         similarWords = new LinkedList<>();
-        textASentences = new LinkedList<>();
-        textBSentences = new LinkedList<>();
-
-        if (collectWords) collectSimilarWords(btreeA.getRoot(), btreeB);
+        if (collectSentences) {
+            collectSimilarWords(btreeA.getRoot(), btreeB);
+            similarSentences = setSimilarSentences(textA);
+        }
     }
 
-    public void setTextASentences(String textA) {
+    public LinkedList<String> setSimilarSentences(String textA) {
+        LinkedList<String> plagiarizedSentences = new LinkedList<>();
         String[] sentences = textA.split("%");
-        for (int i = 0; i < sentences.length; i++) {
-            int score = scoreSentence(sentences[i]);
-            if (score < 2) textASentences.add(sentences[i]);
-        }
-    }
 
-    public void setTextBSentences(String textB) {
-        String[] sentences = textB.split("%");
         for (int i = 0; i < sentences.length; i++) {
-            int score = scoreSentence(sentences[i]);
-            if (score < 2) textBSentences.add(sentences[i]);
+            double score = scoreSentence(sentences[i]);
+            if (score > 0.50) plagiarizedSentences.add(sentences[i]);
         }
+
+        return plagiarizedSentences;
     }
 
     private double summationOfIntersection(Node node, BinarySearchTree source) {
@@ -76,7 +71,7 @@ public class CosineDistance {
         }
     }
 
-    private int scoreSentence(String sentence) {
+    private double scoreSentence(String sentence) {
         String[] words = sentence.split(">");
 
         if (words.length > 0) {
@@ -84,11 +79,9 @@ public class CosineDistance {
             for (String word : words) {
                 if (word.length() > 2 && similarWords.contains(word)) score++;
             }
-            return words.length - score;
+            return (double)score / (double)words.length;
         }
 
         return 0;
     }
-
-
 }

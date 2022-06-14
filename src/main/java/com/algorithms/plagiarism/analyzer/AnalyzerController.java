@@ -94,16 +94,10 @@ public class AnalyzerController {
             // Compute the cosine distance
             CosineDistance cosineDistance = new CosineDistance(textA.get(), textB.get(), true);
 
-            // Check of both document have exact the same sentences
-            cosineDistance.setTextASentences(textA.get());
-            cosineDistance.setTextBSentences(textB.get());
-
             // Create a response
             ComparisonResponseBody response = new ComparisonResponseBody();
             response.setCosineDistance(cosineDistance.getCosineDistance());
-            response.setSimilarTerms(cosineDistance.getSimilarWords());
-            response.setSentencesA(cosineDistance.getTextASentences());
-            response.setSentencesB(cosineDistance.getTextBSentences());
+            response.setSimilarSentences(cosineDistance.getSimilarSentences());
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ExecutionException | InterruptedException e) {
