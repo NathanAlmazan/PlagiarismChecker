@@ -1,6 +1,8 @@
 package com.algorithms.plagiarism.assignment.models;
 
+import com.algorithms.plagiarism.accounts.models.StudentModel;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +26,7 @@ public class ClassroomModel {
     @Column(nullable = false)
     private Long classroomId;
 
-    @Column(name = "class_code", nullable = false, length = 10)
+    @Column(name = "class_code", nullable = false, length = 10, unique = true)
     private String classroomCode;
 
     @Column(name = "class_name", nullable = false, length = 20)
@@ -38,4 +41,12 @@ public class ClassroomModel {
     @JsonBackReference
     @JoinColumn(name = "subjectId", referencedColumnName = "subjectId", nullable = false)
     private SubjectModel classSubject;
+
+    @ManyToMany(mappedBy = "classrooms", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<StudentModel> enrolledStudents;
+
+    @OneToMany(mappedBy = "classAssignments")
+    @JsonManagedReference
+    private List<AssignmentModel> assignments;
 }

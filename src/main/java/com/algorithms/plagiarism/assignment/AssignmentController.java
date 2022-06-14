@@ -1,8 +1,10 @@
 package com.algorithms.plagiarism.assignment;
 
+import com.algorithms.plagiarism.accounts.models.StudentModel;
 import com.algorithms.plagiarism.assignment.models.ClassroomModel;
 import com.algorithms.plagiarism.assignment.models.SubjectModel;
 import com.algorithms.plagiarism.assignment.requestDto.ClassroomDto;
+import com.algorithms.plagiarism.assignment.requestDto.EnrollDto;
 import com.algorithms.plagiarism.assignment.requestDto.SubjectDto;
 import com.algorithms.plagiarism.assignment.services.ClassServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,21 @@ public class AssignmentController {
         return new ResponseEntity<>(classServices.createNewClassroom(newClassroom.getSubjectId(), newClassroom.getClassName()), HttpStatus.CREATED);
     }
 
+    @PostMapping("/room/enroll")
+    public ResponseEntity<ClassroomModel> addStudentToClassroom(@Valid @RequestBody EnrollDto enrollStudent) {
+        return new ResponseEntity<>(classServices.registerStudentToClass(
+                enrollStudent.getStudentId(),
+                enrollStudent.getClassCode()
+        ), HttpStatus.CREATED);
+    }
+
     @GetMapping("/subject/find/{teacherId}")
     public ResponseEntity<List<SubjectModel>> getTeacherSubjects(@PathVariable("teacherId") Long teacherId) {
         return new ResponseEntity<>(classServices.getTeacherSubjects(teacherId), HttpStatus.OK);
+    }
+
+    @GetMapping("/room/find/{studentId}")
+    public ResponseEntity<List<ClassroomModel>> getStudentClassrooms(@PathVariable("studentId") Long studentId) {
+        return new ResponseEntity<>(classServices.getStudentSubjects(studentId), HttpStatus.OK);
     }
 }

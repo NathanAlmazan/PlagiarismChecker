@@ -1,12 +1,15 @@
 package com.algorithms.plagiarism.analyzer.models;
 
+import com.algorithms.plagiarism.assignment.models.AssignmentModel;
+import com.algorithms.plagiarism.assignment.models.StudentAssignment;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,4 +37,12 @@ public class FileStorage {
 
     @Column(name = "originality")
     private double originalityScore;
+
+    @OneToOne(mappedBy = "assignFile")
+    @JsonBackReference
+    private StudentAssignment assignmentList;
+
+    @OneToOne(mappedBy = "referenceFile")
+    @JsonBackReference
+    private AssignmentModel refAssignment;
 }

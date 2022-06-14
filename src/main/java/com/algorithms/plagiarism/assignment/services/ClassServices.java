@@ -1,5 +1,7 @@
 package com.algorithms.plagiarism.assignment.services;
 
+import com.algorithms.plagiarism.accounts.models.StudentModel;
+import com.algorithms.plagiarism.accounts.models.StudentRepository;
 import com.algorithms.plagiarism.accounts.models.TeacherModel;
 import com.algorithms.plagiarism.accounts.models.TeacherRepository;
 import com.algorithms.plagiarism.assignment.models.ClassroomModel;
@@ -20,6 +22,7 @@ public class ClassServices {
     @Autowired private SubjectRepository subjectRepository;
     @Autowired private ClassroomRepository classroomRepository;
     @Autowired private TeacherRepository teacherRepository;
+    @Autowired private StudentRepository studentRepository;
     @Autowired private EntityManager entityManager;
 
     public SubjectModel createNewSubject(SubjectModel newSubject, Long teacherId) {
@@ -46,10 +49,31 @@ public class ClassServices {
         return classroomRepository.save(newClass);
     }
 
-    public List<SubjectModel> getTeacherSubjects(Long teacherId) {
-        TypedQuery<SubjectModel> query = entityManager.createQuery("SELECT s FROM SubjectModel s WHERE s.subjectTeacher.teacherId = :teacherId", SubjectModel.class);
-        List<SubjectModel> subjects = query.setParameter("teacherId", teacherId).getResultList();
+    public List<ClassroomModel> getStudentSubjects(Long studentId) {
+        String psql = "SELECT c FROM ClassroomModel c JOIN c.enrolledStudents s WHERE s.studentId = :id";
+        TypedQuery<ClassroomModel> query = entityManager.createQuery(psql, ClassroomModel.class);
 
-        return subjects;
+        return query.setParameter("id", studentId).getResultList();
+    }
+
+    public List<SubjectModel> getTeacherSubjects(Long teacherId) {
+        String psql = "SELECT s FROM SubjectModel s WHERE s.subjectTeacher.teacherId = :teacherId";
+        TypedQuery<SubjectModel> query = entityManager.createQuery(psql, SubjectModel.class);
+        return query.setParameter("teacherId", teacherId).getResultList();
+    }
+
+    public ClassroomModel registerStudentToClass(Long studentId, String classCode) {
+        StudentModel student = studentRepository.findById(studentId).orElseThrow(() -> {
+            throw new EntityNotFoundException("Student ID " + studentId + " not found.");
+        });
+
+        ClassroomModel classroom = classroomRepository.findByClassroomCode(classCode);
+
+        if (classroom == null) throw new EntityNotFoundException("Class with code " + classCode + " not found.");
+
+        classroom.getEnrolledStudents().add(student);
+        student.getClassrooms().add(classroom);
+
+        return classroomRepository.save(classroom);
     }
 }
