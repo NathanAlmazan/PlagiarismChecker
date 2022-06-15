@@ -7,7 +7,7 @@ import java.util.LinkedList;
 @Getter
 public class CosineDistance {
     private LinkedList<String> similarSentences;
-    private LinkedList<String> similarWords;
+    private HashTable similarWords;
     private double cosineDistance;
 
     public CosineDistance(String textA, String textB, boolean collectSentences) {
@@ -33,8 +33,8 @@ public class CosineDistance {
 
         cosineDistance = summationOfIntersection(btreeA.getRoot(), btreeB) / Math.sqrt(btreeA.summationOfValues(btreeA.getRoot()) * btreeB.summationOfValues(btreeB.getRoot()));
 
-        similarWords = new LinkedList<>();
         if (collectSentences) {
+            similarWords = new HashTable(setA.length);
             collectSimilarWords(btreeA.getRoot(), btreeB);
             similarSentences = setSimilarSentences(textA);
         }
@@ -46,7 +46,7 @@ public class CosineDistance {
 
         for (int i = 0; i < sentences.length; i++) {
             double score = scoreSentence(sentences[i]);
-            if (score > 0.50) plagiarizedSentences.add(sentences[i]);
+            if (score > 0.60) plagiarizedSentences.add(sentences[i]);
         }
 
         return plagiarizedSentences;
@@ -77,7 +77,7 @@ public class CosineDistance {
         if (words.length > 0) {
             int score = 0;
             for (String word : words) {
-                if (word.length() > 2 && similarWords.contains(word)) score++;
+                if (word.length() > 2 && similarWords.get(word) != null) score++;
             }
             return (double)score / (double)words.length;
         }
