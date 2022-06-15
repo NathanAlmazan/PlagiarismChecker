@@ -8,7 +8,7 @@ import java.util.LinkedList;
 public class CosineDistance {
     private LinkedList<String> similarSentences;
     private HashTable similarWords;
-    private double cosineDistance;
+    private final double cosineDistance;
 
     public CosineDistance(String textA, String textB, boolean collectSentences) {
         String[] setA = textA.split(">");
@@ -44,9 +44,9 @@ public class CosineDistance {
         LinkedList<String> plagiarizedSentences = new LinkedList<>();
         String[] sentences = textA.split("%");
 
-        for (int i = 0; i < sentences.length; i++) {
-            double score = scoreSentence(sentences[i]);
-            if (score > 0.60) plagiarizedSentences.add(sentences[i]);
+        for (String sentence : sentences) {
+            double score = scoreSentence(sentence);
+            if (score > 0.60) plagiarizedSentences.add(sentence);
         }
 
         return plagiarizedSentences;

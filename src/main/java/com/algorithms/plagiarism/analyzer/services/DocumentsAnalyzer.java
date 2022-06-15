@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 
 @Getter
 public class DocumentsAnalyzer {
-    private FileStorage mostSimilarDoc;
+    private final FileStorage mostSimilarDoc;
 
     public DocumentsAnalyzer(List<FileStorage> files, FileStorage source) throws IOException, ExecutionException, InterruptedException {
         FileExtractor extractor = new FileExtractor(source.getRenderedFileLink());

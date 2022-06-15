@@ -39,7 +39,7 @@ public class HashTable {
     private void createNewArray() {
         int newSize = storageSize * 2;
         HashNode[] newStorage = new HashNode[newSize];
-        if (storageSize >= 0) System.arraycopy(storage, 0, newStorage, 0, storageSize);
+        if (storageSize >= 0) System.arraycopy(storage, 0, newStorage, 0, newSize);
 
         this.storageSize = newSize;
         this.storage = newStorage;

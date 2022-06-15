@@ -24,9 +24,7 @@ public class FileStorageCrud {
 
     public List<FileStorage> getAllFilesWithException(List<Long> fileIds) {
         TypedQuery<FileStorage> query = entityManager.createQuery("SELECT f FROM FileStorage f WHERE f.file_id NOT IN :fileIds", FileStorage.class);
-        List<FileStorage> files = query.setParameter("fileIds", fileIds).getResultList();
-
-        return files;
+        return query.setParameter("fileIds", fileIds).getResultList();
     }
 
     public FileStorage getFileById(Long fileId) {

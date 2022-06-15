@@ -1,7 +1,7 @@
 package com.algorithms.plagiarism.analyzer.cosine;
 
 public class HashNode {
-    private String value;
+    private final String value;
     public HashNode nextNode;
 
     public HashNode(String value) {
