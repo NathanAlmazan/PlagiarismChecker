@@ -37,7 +37,7 @@ public class ClassroomModel {
     @Column(name = "date_created")
     private Date dateCreated;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "subjectId", referencedColumnName = "subjectId", nullable = false)
     private SubjectModel classSubject;
@@ -46,7 +46,7 @@ public class ClassroomModel {
     @JsonManagedReference
     private List<StudentModel> enrolledStudents;
 
-    @OneToMany(mappedBy = "classAssignments")
+    @OneToMany(mappedBy = "classAssignments", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<AssignmentModel> assignments;
 }

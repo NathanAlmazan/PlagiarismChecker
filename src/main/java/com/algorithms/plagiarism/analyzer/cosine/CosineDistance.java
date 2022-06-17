@@ -45,8 +45,8 @@ public class CosineDistance {
         String[] sentences = textA.split("%");
 
         for (String sentence : sentences) {
-            double score = scoreSentence(sentence);
-            if (score > 0.60) plagiarizedSentences.add(sentence);
+            int score = scoreSentence(sentence);
+            if (score < 2) plagiarizedSentences.add(sentence);
         }
 
         return plagiarizedSentences;
@@ -71,7 +71,7 @@ public class CosineDistance {
         }
     }
 
-    private double scoreSentence(String sentence) {
+    private int scoreSentence(String sentence) {
         String[] words = sentence.split(">");
 
         if (words.length > 0) {
@@ -79,7 +79,7 @@ public class CosineDistance {
             for (String word : words) {
                 if (word.length() > 2 && similarWords.get(word) != null) score++;
             }
-            return (double)score / (double)words.length;
+            return (words.length - score);
         }
 
         return 0;

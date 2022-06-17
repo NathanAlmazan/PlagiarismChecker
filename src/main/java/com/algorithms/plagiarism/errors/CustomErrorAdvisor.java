@@ -1,9 +1,6 @@
 package com.algorithms.plagiarism.errors;
 
-import com.algorithms.plagiarism.errors.types.EntityNotFoundException;
-import com.algorithms.plagiarism.errors.types.FileConversionFailed;
-import com.algorithms.plagiarism.errors.types.IncompleteArgumentsException;
-import com.algorithms.plagiarism.errors.types.InternalErrorException;
+import com.algorithms.plagiarism.errors.types.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +19,15 @@ public class CustomErrorAdvisor extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IncompleteArgumentsException.class)
     public ResponseEntity<Object> handleIncompleteArgumentsException(
             IncompleteArgumentsException ex, WebRequest request
+    ) {
+        CustomErrorResponse error = new CustomErrorResponse(400);
+        error.addErrorMessage(ex.getMessage());
+        return new ResponseEntity<>(error.getErrorObject(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<Object> handleInvalidRequestException(
+            InvalidRequestException ex, WebRequest request
     ) {
         CustomErrorResponse error = new CustomErrorResponse(400);
         error.addErrorMessage(ex.getMessage());

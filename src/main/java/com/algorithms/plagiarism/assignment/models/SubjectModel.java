@@ -28,12 +28,12 @@ public class SubjectModel {
     @Column(name = "sub_description", nullable = false, length = 70)
     private String subjectDescription;
 
-    @ManyToOne()
+    @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "teacher_id", referencedColumnName = "teacherId", nullable = false)
     private TeacherModel subjectTeacher;
 
-    @OneToMany(mappedBy = "classSubject")
+    @OneToMany(mappedBy = "classSubject", cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private List<ClassroomModel> classrooms;
 }

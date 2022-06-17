@@ -29,12 +29,12 @@ public class TeacherModel {
     @Column(name = "school", nullable = false, length = 50)
     private String schoolName;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "account_uid", referencedColumnName = "account_uid", nullable = false)
     private AccountModel teacherAccount;
 
-    @OneToMany(mappedBy = "subjectTeacher")
+    @OneToMany(mappedBy = "subjectTeacher", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<SubjectModel> subjects;
 }

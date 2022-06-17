@@ -36,7 +36,8 @@ public class AnalyzerController {
 
     @PostMapping(value = "/file/extract", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<FileStorage> extractText(@Valid @NotNull @RequestParam("file") final MultipartFile pdfFile) {
+    public ResponseEntity<FileStorage> extractText(@Valid @NotNull @RequestParam("file") final MultipartFile pdfFile,
+                                                   @RequestParam("assignId") Long assignId) {
         if (pdfFile.isEmpty()) throw new IncompleteArgumentsException("PDF file is required.");
         try {
             // Extract words in texts, clean, and tokenize
@@ -60,7 +61,7 @@ public class AnalyzerController {
             newFile.setOriginalFileLink(originalLink.get());
             newFile.setRenderedFileLink(renderedLink.get());
 
-            return new ResponseEntity<>(fileStorageCrud.insertFile(newFile), HttpStatus.CREATED);
+            return new ResponseEntity<>(fileStorageCrud.insertFile(newFile, assignId), HttpStatus.CREATED);
         } catch (IOException e) {
             throw new FileConversionFailed();
         } catch (ExecutionException | InterruptedException e) {
@@ -99,6 +100,10 @@ public class AnalyzerController {
             response.setCosineDistance(cosineDistance.getCosineDistance());
             response.setSimilarSentences(cosineDistance.getSimilarSentences());
 
+            // Save Result
+            if (cosineDistance.getSimilarSentences().size() > 0)
+                fileStorageCrud.updateFileInformation(body.getDocumentA(), body.getDocumentB(), cosineDistance.getCosineDistance());
+
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ExecutionException | InterruptedException e) {
             throw new InternalErrorException(e.getMessage());
@@ -107,7 +112,7 @@ public class AnalyzerController {
 
     @PostMapping("/analyze")
     public ResponseEntity<FileStorage> analyzeDocument(@Valid @RequestBody AnalyzerRequestBody body) {
-        List<FileStorage> files = fileStorageCrud.getAllFilesWithException(body.getExcludeDocuments());
+        List<FileStorage> files = fileStorageCrud.getAllFilesWithException(body.getExcludeDocuments(), body.getAssignId());
         FileStorage analyzedFile = fileStorageCrud.getFileById(body.getDocumentId());
 
         try {
@@ -145,5 +150,26 @@ public class AnalyzerController {
         } catch (IOException e) {
             throw new InternalErrorException(e.getMessage());
         }
+    }
+
+    @GetMapping("/file/content/{fileUId}")
+    public ResponseEntity<PlainResponseDto> getPlainFileContent(@PathVariable("fileUId") String fileUid) {
+        FileStorage file = fileStorageCrud.getFIleByUId(fileUid);
+        FileExtractor extractor = new FileExtractor();
+        try {
+            String content = extractor.getPlainContent(file.getOriginalFileLink());
+            PlainResponseDto response = new PlainResponseDto();
+            response.setMessage(content);
+            response.setStatus(200);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (IOException e) {
+            throw new InternalErrorException(e.getMessage());
+        }
+    }
+
+    @GetMapping("/file/storage/{fileUid}")
+    public ResponseEntity<FileStorage> getFIleByUid(@PathVariable("fileUid") String fileUid) {
+        return new ResponseEntity<>(fileStorageCrud.getFIleByUId(fileUid), HttpStatus.OK);
     }
 }

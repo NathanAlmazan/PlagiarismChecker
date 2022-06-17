@@ -29,11 +29,11 @@ public class StudentModel {
     private String level;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference
     @JoinColumn(name = "account_uid", referencedColumnName = "account_uid", nullable = false)
     private AccountModel studentAccount;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinTable(
             name = "class_details",
@@ -41,7 +41,7 @@ public class StudentModel {
             inverseJoinColumns = @JoinColumn(name = "classroomId"))
     private List<ClassroomModel> classrooms;
 
-    @OneToMany(mappedBy = "assignment")
+    @OneToMany(mappedBy = "assignment", fetch = FetchType.LAZY)
     @JsonBackReference
     private List<StudentAssignment> assignments;
 }

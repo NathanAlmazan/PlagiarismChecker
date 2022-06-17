@@ -30,7 +30,7 @@ public class StudentAssignment {
     @ManyToOne
     @MapsId("assignmentId")
     @JoinColumn(name = "assign_id")
-    @JsonBackReference
+    @JsonManagedReference
     private AssignmentModel assignment;
 
     @CreationTimestamp
@@ -39,7 +39,7 @@ public class StudentAssignment {
     private Date dateFinished;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "file_id", referencedColumnName = "file_id",nullable = false)
     private FileStorage assignFile;
 

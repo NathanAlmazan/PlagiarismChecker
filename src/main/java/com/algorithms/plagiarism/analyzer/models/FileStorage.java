@@ -3,12 +3,16 @@ package com.algorithms.plagiarism.analyzer.models;
 import com.algorithms.plagiarism.assignment.models.AssignmentModel;
 import com.algorithms.plagiarism.assignment.models.StudentAssignment;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -38,11 +42,23 @@ public class FileStorage {
     @Column(name = "originality")
     private double originalityScore;
 
-    @OneToOne(mappedBy = "assignFile")
-    @JsonBackReference
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_uploaded")
+    private Date dateUploaded;
+
+    @ManyToOne
+    private FileStorage parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<FileStorage> plagiarized;
+
+    @OneToOne(mappedBy = "assignFile", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private StudentAssignment assignmentList;
 
-    @OneToOne(mappedBy = "referenceFile")
+    @ManyToOne
     @JsonBackReference
-    private AssignmentModel refAssignment;
+    @JoinColumn(name = "assignment_id", referencedColumnName = "assignmentId")
+    private AssignmentModel assignment;
 }

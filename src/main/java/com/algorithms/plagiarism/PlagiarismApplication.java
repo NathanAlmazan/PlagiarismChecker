@@ -18,8 +18,9 @@ public class PlagiarismApplication {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api/v1//**").allowedOrigins("http://localhost:3000")
-						.allowedMethods("POST", "GET");
+				registry.addMapping("/api/**").allowedOrigins("http://localhost:3000")
+						.allowedHeaders("Content-Type", "Accept")
+						.allowedMethods("POST", "GET", "DELETE");
 			}
 		};
 	}

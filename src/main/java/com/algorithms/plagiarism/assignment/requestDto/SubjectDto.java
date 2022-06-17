@@ -19,5 +19,7 @@ public class SubjectDto {
     @Length(min = 1, max = 70)
     private String subjectDescription;
 
-    @NotNull private Long teacherId;
+    private Long teacherId;
+
+    private Long subjectId;
 }

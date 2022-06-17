@@ -16,4 +16,6 @@ public class ClassroomDto {
     @NotNull
     @Length(min = 1, max = 20)
     private String className;
+
+    private Long classId;
 }

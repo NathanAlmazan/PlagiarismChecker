@@ -1,5 +1,6 @@
 package com.algorithms.plagiarism.analyzer.services;
 
+import com.algorithms.plagiarism.analyzer.models.FileStorage;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 
@@ -40,6 +42,16 @@ public class FileExtractor {
 
     public String getPlainContent(final MultipartFile pdfFile) throws IOException {
         final PDDocument document = PDDocument.load(pdfFile.getInputStream());
+        final PDFTextStripper stripPDF = new PDFTextStripper();
+        String plainText = stripPDF.getText(document);
+        document.close();
+
+        return plainText;
+    }
+
+    public String getPlainContent(String fileUrl) throws IOException {
+        URL url = new URL(fileUrl);
+        final PDDocument document = PDDocument.load(url.openStream());
         final PDFTextStripper stripPDF = new PDFTextStripper();
         String plainText = stripPDF.getText(document);
         document.close();

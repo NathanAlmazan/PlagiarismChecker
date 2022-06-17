@@ -1,5 +1,6 @@
 package com.algorithms.plagiarism.accounts.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,6 @@ public class AccountModel {
     private TeacherModel teacher;
 
     @OneToOne(mappedBy = "studentAccount")
-    @JsonManagedReference
+    @JsonBackReference
     private StudentModel student;
 }

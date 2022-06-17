@@ -2,6 +2,7 @@ package com.algorithms.plagiarism.assignment.models;
 
 import com.algorithms.plagiarism.analyzer.models.FileStorage;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,17 +42,16 @@ public class AssignmentModel {
     @Column(name = "assign_due_time", nullable = false, columnDefinition = "TIME")
     private LocalTime assignDueTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "class_id", referencedColumnName = "classroomId", nullable = false)
     private ClassroomModel classAssignments;
 
-    @OneToMany(mappedBy = "student")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
+    @JsonBackReference
     private List<StudentAssignment> students;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonManagedReference
-    @JoinColumn(name = "reference_id", referencedColumnName = "file_id")
-    private FileStorage referenceFile;
+    private List<FileStorage> submittedFiles;
 }

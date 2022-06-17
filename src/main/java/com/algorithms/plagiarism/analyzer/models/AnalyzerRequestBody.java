@@ -12,5 +12,6 @@ import java.util.List;
 @Setter
 public class AnalyzerRequestBody {
     @NotNull private Long documentId;
+    @NotNull private Long assignId;
     @NotNull private List<Long> excludeDocuments;
 }
