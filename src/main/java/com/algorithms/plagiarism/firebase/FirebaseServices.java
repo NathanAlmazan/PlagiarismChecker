@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 @Service
@@ -21,10 +22,10 @@ public class FirebaseServices {
     @EventListener
     public void init(ApplicationReadyEvent event) {
         try {
-            ClassPathResource serviceAccount = new ClassPathResource("plagiarismchecker-d2959-firebase-adminsdk-fi25m-e53dc877d5.json");
+            URL serviceAccount = new URL(System.getenv("FIREBASE_SERVICE"));
 
             FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.openStream()))
                     .setProjectId(System.getenv("FIREBASE_PROJECT_ID"))
                     .setStorageBucket(System.getenv("FIREBASE_BUCKET_NAME"))
                     .build();
