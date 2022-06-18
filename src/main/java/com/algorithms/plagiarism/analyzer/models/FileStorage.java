@@ -48,12 +48,14 @@ public class FileStorage {
     private Date dateUploaded;
 
     @ManyToOne
+    @JsonManagedReference
     private FileStorage parent;
 
     @OneToMany(mappedBy = "parent")
+    @JsonIgnore
     private List<FileStorage> plagiarized;
 
-    @OneToOne(mappedBy = "assignFile", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "assignFile", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private StudentAssignment assignmentList;
 

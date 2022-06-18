@@ -67,6 +67,18 @@ public class FileStorageCrud {
         return updated;
     }
 
+    public FileStorage saveOriginality(Long fileId, Double originality) {
+        FileStorage updated = fileStorageRepository.findById(fileId).map(file -> {
+            file.setOriginalityScore(originality);
+
+            return fileStorageRepository.save(file);
+        }).orElseThrow(() -> {
+            throw new EntityNotFoundException("File with ID " + fileId + " not found.");
+        });
+
+        return updated;
+    }
+
     public FileStorage getFIleByUId(String uid) {
         FileStorage file = fileStorageRepository.findByFileUid(uid);
         if (file == null) throw new EntityNotFoundException("File not found.");

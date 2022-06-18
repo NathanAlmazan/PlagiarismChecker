@@ -48,7 +48,7 @@ public class AssignmentModel {
     private ClassroomModel classAssignments;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
-    @JsonBackReference
+    @JsonManagedReference
     private List<StudentAssignment> students;
 
     @OneToMany(mappedBy = "assignment", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

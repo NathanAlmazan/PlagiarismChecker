@@ -159,10 +159,15 @@ public class ClassServices {
             throw new EntityNotFoundException("File ID " + fileId + " not found.");
         });
 
+        StudentAssignKey key = new StudentAssignKey();
+        key.setAssignmentId(assignId);
+        key.setStudentId(studentId);
+
         StudentAssignment studentAssign = new StudentAssignment();
         studentAssign.setStudent(student);
         studentAssign.setAssignment(assignment);
         studentAssign.setAssignFile(assignFile);
+        studentAssign.setId(key);
 
         return studentAssignRepository.save(studentAssign);
     }
@@ -184,6 +189,17 @@ public class ClassServices {
         assignment.setClassAssignments(classroom);
 
         return assignmentRepository.save(assignment);
+    }
+
+    public AssignmentModel getAssignmentData(String classCode, Long assignmentId) {
+        AssignmentModel assignment = assignmentRepository.findById(assignmentId).orElseThrow(() -> {
+            throw new EntityNotFoundException("Assignment not found;");
+        });
+
+        if (!assignment.getClassAssignments().getClassroomCode().equals(classCode))
+            throw new InvalidRequestException("cannot access this assignment.");
+
+        return assignment;
     }
 
     public AssignmentModel updateAssignmentData(AssignmentDto updated) {

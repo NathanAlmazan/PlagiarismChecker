@@ -101,8 +101,9 @@ public class AnalyzerController {
             response.setSimilarSentences(cosineDistance.getSimilarSentences());
 
             // Save Result
-            if (cosineDistance.getSimilarSentences().size() > 0)
+            if (cosineDistance.getSimilarSentences().size() > 0 && cosineDistance.getCosineDistance() > 0.49)
                 fileStorageCrud.updateFileInformation(body.getDocumentA(), body.getDocumentB(), cosineDistance.getCosineDistance());
+            else fileStorageCrud.saveOriginality(body.getDocumentA(), cosineDistance.getCosineDistance());
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (ExecutionException | InterruptedException e) {

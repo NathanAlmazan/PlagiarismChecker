@@ -116,4 +116,9 @@ public class AssignmentController {
     public ResponseEntity<List<ClassroomModel>> getStudentClassrooms(@PathVariable("studentId") Long studentId) {
         return new ResponseEntity<>(classServices.getStudentSubjects(studentId), HttpStatus.OK);
     }
+
+    @RequestMapping(path = "/assignment/{classCode}/{assignId}", method = RequestMethod.GET)
+    public ResponseEntity<AssignmentModel> getAssignmentData(@PathVariable("classCode") String classCode, @PathVariable("assignId") Long assignId) {
+        return new ResponseEntity<>(classServices.getAssignmentData(classCode, assignId), HttpStatus.OK);
+    }
 }

@@ -30,7 +30,7 @@ public class StudentAssignment {
     @ManyToOne
     @MapsId("assignmentId")
     @JoinColumn(name = "assign_id")
-    @JsonManagedReference
+    @JsonBackReference
     private AssignmentModel assignment;
 
     @CreationTimestamp
