@@ -1,5 +1,6 @@
 package com.algorithms.plagiarism;
 
+import lombok.NonNull;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +18,8 @@ public class PlagiarismApplication {
 	public WebMvcConfigurer corsConfigure() {
 		return new WebMvcConfigurer() {
 			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api/**").allowedOrigins("http://localhost:3000")
+			public void addCorsMappings(@NonNull CorsRegistry registry) {
+				registry.addMapping("/api/**").allowedOrigins("http://localhost:3000", "https://placker.herokuapp.com")
 						.allowedHeaders("Content-Type", "Accept")
 						.allowedMethods("POST", "GET", "DELETE");
 			}
