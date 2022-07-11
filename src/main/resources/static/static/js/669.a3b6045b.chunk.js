@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkplagiarism=self.webpackChunkplagiarism||[]).push([[669],{1669:function(n,r,e){e.r(r),e.d(r,{default:function(){return a}});var i=e(2739),u=e(3239),t=e(184);function a(n){var r=n.open;return(0,t.jsx)(i.Z,{sx:{zIndex:function(n){return n.zIndex.drawer+1}},open:r,children:(0,t.jsx)(u.Z,{color:"inherit"})})}}}]);
+//# sourceMappingURL=669.a3b6045b.chunk.js.map
