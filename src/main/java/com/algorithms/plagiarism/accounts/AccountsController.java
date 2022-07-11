@@ -3,6 +3,7 @@ package com.algorithms.plagiarism.accounts;
 import com.algorithms.plagiarism.accounts.models.AccountModel;
 import com.algorithms.plagiarism.accounts.models.StudentModel;
 import com.algorithms.plagiarism.accounts.models.TeacherModel;
+import com.algorithms.plagiarism.accounts.requestDto.AccountDto;
 import com.algorithms.plagiarism.accounts.requestDto.StudentDto;
 import com.algorithms.plagiarism.accounts.requestDto.TeacherDto;
 import com.algorithms.plagiarism.accounts.services.AccountServices;
@@ -60,7 +61,7 @@ public class AccountsController {
     }
 
     @GetMapping("/find/{uid}")
-    public ResponseEntity<AccountModel> getAccountInformation(@PathVariable("uid") String uid) {
-        return new ResponseEntity<>(accountServices.getAccountByUid(uid), HttpStatus.OK);
+    public ResponseEntity<AccountDto> getAccountInformation(@PathVariable("uid") String uid) {
+        return new ResponseEntity<>(new AccountDto(accountServices.getAccountByUid(uid)), HttpStatus.OK);
     }
 }

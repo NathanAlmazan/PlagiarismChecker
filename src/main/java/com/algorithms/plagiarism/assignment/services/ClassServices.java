@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class ClassServices {
     }
 
     public SubjectModel editSubject(Long subjectId, String title, String description) {
-        SubjectModel updatedSubject = subjectRepository.findById(subjectId).map(subject -> {
+        return subjectRepository.findById(subjectId).map(subject -> {
             subject.setSubjectTitle(title);
             subject.setSubjectDescription(description);
 
@@ -50,8 +51,6 @@ public class ClassServices {
         }).orElseThrow(() -> {
             throw new EntityNotFoundException("Subject not found,");
         });
-
-        return updatedSubject;
     }
 
     public SubjectModel deleteSubject(Long subjectId) {
@@ -95,7 +94,7 @@ public class ClassServices {
             throw new EntityNotFoundException("Subject not found.");
         });
 
-        ClassroomModel classroom = classroomRepository.findById(classId)
+        return classroomRepository.findById(classId)
                 .map(room -> {
                     room.setClassroomName(className);
                     room.setClassSubject(subject);
@@ -104,8 +103,6 @@ public class ClassServices {
                 }).orElseThrow(() -> {
                     throw new EntityNotFoundException("Classroom not found.");
                 });
-
-        return classroom;
     }
 
     public ClassroomModel deleteClassroom(Long classId) {
@@ -232,5 +229,18 @@ public class ClassServices {
         assignmentRepository.deleteById(assignmentId);
 
         return existingAssign;
+    }
+
+    public List<Long> getStudentAssignment(Long studentId) {
+        StudentModel student = studentRepository.findById(studentId).orElseThrow(() -> {
+            throw new EntityNotFoundException("Student ID " + studentId + " not found.");
+        });
+
+        List<Long> assignments = new ArrayList<>();
+
+        for (StudentAssignment assignment : studentAssignRepository.findStudentSubmittedAssignments(studentId))
+            assignments.add(assignment.getId().getAssignmentId());
+
+        return assignments;
     }
 }

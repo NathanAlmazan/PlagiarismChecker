@@ -2,7 +2,6 @@ package com.algorithms.plagiarism.assignment.models;
 
 import com.algorithms.plagiarism.analyzer.models.FileStorage;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.Getter;
