@@ -21,7 +21,7 @@ bin/
 *.iws
 *.iml
 *.ipr
-*.json
+plagiarismchecker-d2959-firebase-adminsdk-fi25m-e53dc877d5.json
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
