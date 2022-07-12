@@ -48,7 +48,7 @@ public class FileStorage {
     private Date dateUploaded;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonIgnore
     private FileStorage parent;
 
     @OneToMany(mappedBy = "parent")
