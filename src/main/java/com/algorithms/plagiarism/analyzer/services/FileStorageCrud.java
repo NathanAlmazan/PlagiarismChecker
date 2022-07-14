@@ -4,6 +4,8 @@ import com.algorithms.plagiarism.analyzer.models.FileStorage;
 import com.algorithms.plagiarism.analyzer.models.FileStorageRepository;
 import com.algorithms.plagiarism.assignment.models.AssignmentModel;
 import com.algorithms.plagiarism.assignment.models.AssignmentRepository;
+import com.algorithms.plagiarism.assignment.models.StudentAssignRepository;
+import com.algorithms.plagiarism.assignment.models.StudentAssignment;
 import com.algorithms.plagiarism.errors.types.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 public class FileStorageCrud {
     @Autowired private FileStorageRepository fileStorageRepository;
     @Autowired private AssignmentRepository assignmentRepository;
+    @Autowired private StudentAssignRepository studentAssignRepository;
     @Autowired private EntityManager entityManager;
 
     public FileStorage insertFile(FileStorage newFile, Long assignid) {
@@ -46,7 +49,12 @@ public class FileStorageCrud {
     }
 
     public void deleteFile(Long fileId) {
-        if (fileStorageRepository.existsById(fileId)) fileStorageRepository.deleteById(fileId);
+        if (fileStorageRepository.existsById(fileId)) {
+            fileStorageRepository.deleteById(fileId);
+            StudentAssignment studentAssignment = studentAssignRepository.findByAssignFile(fileId);
+
+            if (studentAssignment != null) studentAssignRepository.deleteById(studentAssignment.getId());
+        }
         else throw new EntityNotFoundException("File with ID of " + fileId + " not found.");
     }
 
