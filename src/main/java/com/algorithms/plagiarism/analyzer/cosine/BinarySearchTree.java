@@ -18,7 +18,7 @@ public class BinarySearchTree {
     private Node addRecursive(Node current, String value, int count) {
         if (current == null) return new Node(value, count);
 
-        if (value.equals(current.value)) {
+        if (matchString(value, current.value)) {
             (current.count)++;
             return current;
         }
@@ -31,7 +31,7 @@ public class BinarySearchTree {
 
     public Node searchElement(Node node, String target) {
         if (node != null) {
-            if (target.equals(node.value)) return node;
+            if (matchString(target, node.value)) return node;
 
             if (target.compareToIgnoreCase(node.value) > 0) return searchElement(node.right, target);
             return searchElement(node.left, target);
@@ -45,5 +45,26 @@ public class BinarySearchTree {
     }
 
     private double square(double i) { return i * i; }
+
+    private static boolean matchString(String word, String pattern) {
+
+        if (word.length() < pattern.length()) {
+            String temp = pattern;
+            pattern = word;
+            word = temp;
+        }
+
+        if ((word.length() - pattern.length()) > 2) return false;
+
+        for (int i = 0; i < word.length(); i++) {
+            for (int j = 0; j < pattern.length(); j++) {
+                if (word.charAt(i + j) != pattern.charAt(j))
+                    break;
+                else if (j == (pattern.length() - 1)) return true;
+            }
+        }
+
+        return false;
+    }
 }
 
