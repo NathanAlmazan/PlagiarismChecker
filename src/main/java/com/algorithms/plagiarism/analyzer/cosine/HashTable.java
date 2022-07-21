@@ -19,7 +19,7 @@ public class HashTable {
         HashNode head = storage[index];
 
         while(head != null) {
-            if (head.getValue().equals(key)) return head.getValue();
+            if (matchString(head.getValue(), key)) return head.getValue();
             head = head.nextNode;
         }
         return null;
@@ -43,5 +43,27 @@ public class HashTable {
 
         this.storageSize = newSize;
         this.storage = newStorage;
+    }
+
+    private boolean matchString(String word, String pattern) {
+
+        if (word.length() < pattern.length()) {
+            String temp = pattern;
+            pattern = word;
+            word = temp;
+        }
+
+        if ((word.length() - pattern.length()) > 2) return false;
+
+        for (int i = 0; i < word.length(); i++) {
+            for (int j = 0; j < pattern.length(); j++) {
+                if ((i + j) > word.length() - 1) return false;
+                else if (word.charAt(i + j) != pattern.charAt(j))
+                    break;
+                else if (j == (pattern.length() - 1)) return true;
+            }
+        }
+
+        return false;
     }
 }
